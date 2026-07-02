@@ -1,0 +1,25 @@
+HOOK:
+🚗 I trained an AI agent to find the perfect moment to change gear — and it reduced fuel consumption vs a fixed-threshold strategy.
+
+POST:
+Gear shift timing has a measurable impact on fuel economy. Too early → lugging. Too late → overspeeding. The optimal point depends on speed, load, road gradient, and dozens of other factors.
+
+In this project I built a custom transmission environment (Gym-style) and trained a Q-Learning RL agent to learn optimal shift points for a 6-speed petrol gearbox, rewarding low BSFC (Brake-Specific Fuel Consumption).
+
+The agent was compared against a classic fixed-RPM threshold strategy:
+⬆️ Smarter upshift decisions in transient acceleration
+⬆️ Proactive downshifts before heavy load events
+⬆️ Measurable BSFC reduction over a simulated drive cycle
+
+This is the academic precursor to the PPO-based shift controllers being deployed in modern DCTs and AMTs by ZF, Schaeffler, and Stellantis.
+
+🔗 Full simulation + visualization on GitHub (link in comments)
+
+HASHTAGS:
+#ReinforcementLearning #Transmission #Powertrain #MachineLearning #Automotive #FuelEfficiency #QLearning #EnergyManagement #OpenToWork
+
+---
+IMAGE SUGGESTION:
+Use `plots/fig1_*.png` (performance chart) as the main LinkedIn image.
+Optionally combine fig1 + fig4 into a 2-panel image using any image editor.
+Keep image width > 1200px for best display in feed.
