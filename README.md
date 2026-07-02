@@ -114,4 +114,3 @@ Thesis: *Computational Intelligence for the Design of Electric Machines*
 
 ---
 
-*Part of a 10-project portfolio in ML for Automotive Engineering*
