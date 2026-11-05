@@ -1,116 +1,97 @@
-# Transmission Shift Point Optimizer — Reinforcement Learning
+# Transmission Shift-Point Optimizer — Tabular Q-Learning
 
-> **Q-Learning agent that learns optimal gear shifts to minimize fuel consumption**
+> Learning discrete gear-shift actions in a simplified transmission environment
 
-[![Python](https://img.shields.io/badge/Python-3.10+-blue.svg)](https://www.python.org/)
-[![scikit-learn](https://img.shields.io/badge/scikit--learn-1.3-orange.svg)](https://scikit-learn.org/)
-[![Domain](https://img.shields.io/badge/Domain-Powertrain%20Control%20&%20Transmission-green.svg)]()
-[![Model](https://img.shields.io/badge/Model-Tabular%20Q-Learning%20proxy%20for%20PPO-purple.svg)]()
+## Overview
 
----
+This project demonstrates reinforcement learning for transmission shift control using a custom, lightweight vehicle/engine environment.
 
-## 🎯 Project Overview
+The agent observes:
+- vehicle speed;
+- current gear;
+- engine speed;
+- simplified engine torque.
 
-| Item | Detail |
-|------|--------|
-| **Domain** | Powertrain Control & Transmission |
-| **ML Model** | Tabular Q-Learning (proxy for PPO) |
-| **Key Metric** | Fuel saving vs fixed threshold baseline |
-| **Tech Stack** | Python · NumPy · Custom Gym-style Environment · Q-Learning · Matplotlib · Seaborn |
+Available actions:
+- hold gear;
+- shift up;
+- shift down.
 
----
+The objective is represented through a reward based on a simplified BSFC proxy plus a shift penalty.
 
-## 🧠 Problem Statement
+## Reinforcement-Learning Method
 
-Q-Learning agent that learns optimal gear shifts to minimize fuel consumption. In engineering design, expensive simulations (FEA, CFD, dyno tests) limit the number of configurations that can be evaluated. Machine learning surrogates and classifiers allow rapid exploration of large design spaces, enabling smarter, faster engineering decisions.
+The implementation uses **tabular Q-learning**, not PPO.
 
----
-
-## 📁 Repository Structure
-
-```
-P04_Transmission_RL/
-├── src/
-│   └── train_rl.py          # Main training & evaluation script
-├── plots/
-│   ├── fig1_*.png              # Performance plots
-│   ├── fig2_*.png              # Analysis plots
-│   ├── fig3_*.png
-│   └── fig4_*.png
-├── docs/
-│   └── technical_notes.md      # Extended methodology notes
-├── metrics.json                 # Saved evaluation metrics
-├── requirements.txt
-├── .gitignore
-└── README.md
+```text
+Episodes: 2000
+Learning rate: 0.10
+Discount factor: 0.95
+Exploration: epsilon-greedy
+Actions: hold / upshift / downshift
 ```
 
----
+Continuous observations are discretized into speed, gear and RPM bins.
 
-## 🚀 Quick Start
+## Baseline Comparison
 
-### 1. Clone & install
+The learned policy is compared with a fixed-threshold baseline:
+- upshift above 3500 rpm;
+- downshift below 1500 rpm;
+- otherwise hold.
+
+The comparison reports the mean simplified BSFC proxy and the resulting percentage reduction.
+
+## Model Scope
+
+This is a **demonstration environment**, not a high-fidelity powertrain model. The engine torque curve, BSFC relationship and drive evolution are simplified and synthetic.
+
+The project demonstrates:
+- Q-learning mechanics;
+- state discretization;
+- epsilon-greedy exploration;
+- baseline policy comparison;
+- policy visualization.
+
+It does not claim production fuel-economy performance or transmission-controller validation.
+
+## Outputs
+
+The script exports:
+- training reward history;
+- learned-policy vs. baseline traces;
+- simplified fuel-consumption comparison;
+- Q-policy heatmap;
+- metrics in `metrics.json`.
+
+## Run
+
 ```bash
-git clone https://github.com/YOUR_USERNAME/P04_Transmission_RL.git
-cd P04_Transmission_RL
+git clone https://github.com/bharath153/Transmission_RL.git
+cd Transmission_RL
 pip install -r requirements.txt
-```
-
-### 2. Run the model
-```bash
 python src/train_rl.py
 ```
 
-### 3. View results
-All plots are saved to `plots/`. Metrics are saved to `metrics.json`.
+## Repository Structure
 
----
+```text
+Transmission_RL/
+├── src/
+│   └── train_rl.py
+├── plots/
+├── docs/
+├── metrics.json
+├── requirements.txt
+└── README.md
+```
 
-## 📊 Results & Visualizations
+## Next Steps
 
-### Model Performance
-**Fuel saving vs fixed threshold baseline**
-
-| Figure | Description |
-|--------|-------------|
-| `fig1_*` | Predicted vs Actual / Confusion Matrix |
-| `fig2_*` | Feature Importance / Anomaly Scores |
-| `fig3_*` | Learning Curve / ROC Curve |
-| `fig4_*` | Design Space / Parametric Study |
-
----
-
-## 🔬 Methodology
-
-### Data Generation
-Synthetic data is generated using physics-informed equations derived from engineering fundamentals. The data generation pipeline mimics real experimental/simulation data to demonstrate production-grade methodology.
-
-### Model Architecture
-`Tabular Q-Learning (proxy for PPO)` — selected based on dataset characteristics (size, feature type, required uncertainty quantification).
-
-### Validation Strategy
-- 80/20 train-test split with fixed random seed
-- 5-fold cross-validation for robust metric estimation
-- Held-out test set never used during hyperparameter tuning
-
----
-
-## 📚 References & Further Reading
-
-- Forrester, A., Sóbester, A., & Keane, A. (2008). *Engineering Design via Surrogate Modelling*. Wiley.
-- Scikit-learn documentation: [https://scikit-learn.org](https://scikit-learn.org)
-- Relevant SAE/IEEE papers cited in `docs/technical_notes.md`
-
----
-
-## 👤 Author
-
-**Bharath Kanaiah Parthiban**  
-M.Sc. Automotive Engineering — Politecnico di Torino (2025)  
-Thesis: *Computational Intelligence for the Design of Electric Machines*  
-
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-Connect-blue)](https://linkedin.com/in/YOUR_PROFILE)
-[![GitHub](https://img.shields.io/badge/GitHub-Follow-black)](https://github.com/YOUR_USERNAME)
-
----
-
+For a higher-fidelity study, this framework could be extended with:
+- a calibrated engine fuel-consumption map;
+- prescribed drive cycles;
+- longitudinal vehicle dynamics;
+- shift-duration and drivability constraints;
+- continuous-state RL methods;
+- policy evaluation over multiple randomized episodes.
