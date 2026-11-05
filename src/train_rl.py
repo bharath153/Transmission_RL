@@ -1,5 +1,5 @@
 """
-Transmission Shift Point Optimizer — Reinforcement Learning (PPO-style)
+Transmission Shift Point Optimizer — Tabular Q-Learning
 ========================================================================
 Trains an RL agent to determine optimal gear shift points for minimum
 fuel consumption, modelled as a 1D discrete action environment.
@@ -68,7 +68,7 @@ class TransmissionEnv:
         done = self.steps >= self.max_steps
         return self._obs(), reward, done
 
-# ── Simulate training: RL agent (tabular Q-learning proxy) ──
+# ── Train tabular Q-learning agent ──
 env = TransmissionEnv()
 n_episodes = 2000
 lr = 0.1; gamma_r = 0.95; eps = 1.0; eps_min = 0.05; eps_decay = 0.995
