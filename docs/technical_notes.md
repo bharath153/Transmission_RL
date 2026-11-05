@@ -1,23 +1,36 @@
-# Technical Notes — Transmission Shift Point Optimizer — Reinforcement Learning
+# Technical Notes — Transmission Shift Control with Tabular Q-Learning
 
-## Data Generation Methodology
-The synthetic dataset is constructed using physics-informed equations that capture the dominant engineering relationships in Powertrain Control & Transmission. While synthetic, the data distributions and feature interactions are calibrated to match published literature values.
+## Purpose
 
-## Model Selection Rationale
-**Tabular Q-Learning (proxy for PPO)** was chosen for the following reasons:
-- Appropriate for the dataset size and feature structure
-- Validated performance on similar engineering regression/classification tasks in literature
-- Interpretable outputs compatible with engineering design workflows
+This repository demonstrates the mechanics of reinforcement learning for discrete transmission shift control in a simplified environment.
 
-## Hyperparameter Tuning
-Where applicable, hyperparameters were tuned via cross-validated grid or random search. Final parameters are documented in the main script.
+## Environment
 
-## Known Limitations
-1. Synthetic data does not capture all real-world noise and sensor artefacts
-2. Model is validated within the training design space (interpolation); extrapolation should be treated with caution
-3. For production deployment, re-training on real experimental data is required
+The state contains:
+- vehicle speed;
+- gear;
+- engine RPM;
+- simplified engine torque.
 
-## References
-- Forrester, A.I.J., Sóbester, A., Keane, A.J. (2008). *Engineering Design via Surrogate Modelling: A Practical Guide*. Wiley.
-- Scikit-learn: Pedregosa et al. (2011). Journal of Machine Learning Research, 12, 2825-2830.
-- Domain-specific references are noted inline in the main script.
+Actions are hold, upshift and downshift.
+
+The reward uses a simplified BSFC proxy together with a shift penalty.
+
+## Learning Algorithm
+
+The implementation is **tabular Q-learning** with:
+- discretized state bins;
+- epsilon-greedy exploration;
+- learning rate 0.1;
+- discount factor 0.95;
+- 2,000 training episodes.
+
+It is not PPO.
+
+## Baseline
+
+The learned policy is compared against a fixed RPM-threshold strategy.
+
+## Limitations
+
+The engine map, longitudinal dynamics, drive cycle and fuel-consumption representation are simplified. Reported savings apply only to this demonstration environment and should not be interpreted as validated vehicle fuel-economy gains.
